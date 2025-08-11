@@ -8,21 +8,16 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @Controller
 @RequestMapping("/vols")
 @RequiredArgsConstructor
-public class VolController {
+public class VolsController {
 
     private final VolService volService;
 
-    @GetMapping
-    public ModelAndView listeVols() {
-        List<Vol> vols = volService.getAllVols();
-        ModelAndView mv = new ModelAndView("template-back");
-
-        mv.addObject("page", "vols/vols"); 
-        mv.addObject("vols", vols);
-        return mv;  
-    }
+    
+    
 }
