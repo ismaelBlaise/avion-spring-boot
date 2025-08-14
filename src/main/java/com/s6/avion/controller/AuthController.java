@@ -1,13 +1,10 @@
 package com.s6.avion.controller;
 
 import com.s6.avion.model.Utilisateur;
-import com.s6.avion.model.Vol;
 import com.s6.avion.service.*;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-
-import java.util.List;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -19,8 +16,7 @@ public class AuthController {
 
     private final UtilisateurService utilisateurService;
 
-    
-    private final VolService volService;
+
     @GetMapping("/")
     public ModelAndView showLoginForm() {
         return new ModelAndView("index"); 
@@ -63,22 +59,5 @@ public class AuthController {
         return "redirect:/"; 
     }
 
-    @GetMapping("/vols/liste")
-    public ModelAndView listeVols() {
-        List<Vol> vols = volService.getAllVols();
-        ModelAndView mv = new ModelAndView("template-back");
-
-        mv.addObject("page", "vols/vols"); 
-        mv.addObject("vols", vols);
-        return mv;  
-    }
-
-    @GetMapping("/menu")
-    public ModelAndView menu(@RequestParam String id) {
-        ModelAndView mv = new ModelAndView("template-back");
-         // Assuming you have a method to get Vol by ID
-        mv.addObject("page", "vols/menu"); 
-        mv.addObject("vol", id);
-        return mv;
-    }
+   
 }

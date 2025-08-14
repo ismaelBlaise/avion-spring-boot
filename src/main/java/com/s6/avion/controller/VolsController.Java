@@ -18,6 +18,26 @@ public class VolsController {
 
     private final VolService volService;
 
+
+    @GetMapping
+    public ModelAndView listeVols() {
+        List<Vol> vols = volService.getAllVols();
+        ModelAndView mv = new ModelAndView("template-back");
+
+        mv.addObject("page", "vols/vols"); 
+        mv.addObject("vols", vols);
+        return mv;  
+    }
+
+    @GetMapping("/menu")
+    public ModelAndView menu(@RequestParam String id) {
+        ModelAndView mv = new ModelAndView("template-back");
+        
+        mv.addObject("page", "vols/menu"); 
+        mv.addObject("vol", id);
+        return mv;
+    }
+
     
     
 }
