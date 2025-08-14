@@ -72,18 +72,20 @@
                     <tr th:each="vol : ${vols}" class="hover:bg-gray-50">
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900" th:text="${vol.avion.modele}">Avion</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" th:text="${vol.numero}">Numéro</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" th:text="${#dates.format(vol.depart, 'dd/MM/yyyy HH:mm')}">Départ</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" th:text="${#dates.format(vol.arrivee, 'dd/MM/yyyy HH:mm')}">Arrivée</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" th:text="${vol.finReservation != null ? #dates.format(vol.finReservation, 'dd/MM/yyyy HH:mm') : 'Non configuré'}">Fin réservation</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" th:text="${vol.finAnnulation != null ? #dates.format(vol.finAnnulation, 'dd/MM/yyyy HH:mm') : 'Non configuré'}">Fin annulation</td>
+                        <td th:text="${#temporals.format(vol.depart, 'dd/MM/yyyy HH:mm')}">Départ</td>
+                        <td th:text="${#temporals.format(vol.arrivee, 'dd/MM/yyyy HH:mm')}">Arrivée</td>
+                        <td th:text="${vol.finReservation != null ? #temporals.format(vol.finReservation, 'dd/MM/yyyy HH:mm') : 'Non configuré'}">Fin réservation</td>
+                        <td th:text="${vol.finAnnulation != null ? #temporals.format(vol.finAnnulation, 'dd/MM/yyyy HH:mm') : 'Non configuré'}">Fin annulation</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" th:text="${vol.villeDepart.nomVille}">Ville départ</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" th:text="${vol.villeArrivee.nomVille}">Ville arrivée</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm">
-                            <span th:text="${vol.statut.statut}" 
-                                  th:classappend="${vol.statut.statut == 'Disponible'} ? 'px-2 py-1 rounded-full text-xs bg-green-100 text-green-800' : 
-                                                  (vol.statut.statut == 'Non disponible' ? 'px-2 py-1 rounded-full text-xs bg-red-100 text-red-800' : 'px-2 py-1 rounded-full text-xs bg-yellow-100 text-yellow-800') }">
-                                Statut
+                            <span class="px-2 py-1 rounded-full text-xs"
+                                  th:classappend="${vol.statut != null && vol.statut.statut == 'Disponible' ? ' bg-green-100 text-green-800' :
+                                                  (vol.statut != null && vol.statut.statut == 'Non disponible' ? ' bg-red-100 text-red-800' :
+                                                  ' bg-yellow-100 text-yellow-800')}">
+                                <span th:text="${vol.statut != null ? vol.statut.statut : 'N/A'}"></span>
                             </span>
+                            
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                             <div class="flex justify-end space-x-3">

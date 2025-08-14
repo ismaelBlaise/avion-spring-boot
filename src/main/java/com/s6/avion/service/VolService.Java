@@ -16,4 +16,8 @@ public class VolService {
     public List<Vol> getAllVols() {
         return volRepository.findAll();
     }
+
+    public Vol getVolById(Integer id) {
+        return volRepository.findById(id).orElse(null);
+    }
 }

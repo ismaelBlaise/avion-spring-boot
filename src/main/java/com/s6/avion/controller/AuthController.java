@@ -2,10 +2,8 @@ package com.s6.avion.controller;
 
 import com.s6.avion.model.Utilisateur;
 import com.s6.avion.service.*;
-
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -16,7 +14,7 @@ public class AuthController {
 
     private final UtilisateurService utilisateurService;
 
-
+    
     @GetMapping("/")
     public ModelAndView showLoginForm() {
         return new ModelAndView("index"); 

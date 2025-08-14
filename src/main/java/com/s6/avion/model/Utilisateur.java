@@ -1,5 +1,7 @@
 package com.s6.avion.model;
 
+import java.util.List;
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -32,4 +34,8 @@ public class Utilisateur {
     @JoinColumn(name = "id_role", nullable = false)
     @ToString.Exclude
     private Role role;
+
+    @OneToMany(mappedBy = "utilisateur", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ToString.Exclude
+    private List<Reservation> reservations;
 }
