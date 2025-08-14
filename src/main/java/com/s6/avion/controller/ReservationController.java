@@ -63,6 +63,22 @@ public class ReservationController {
         }
         return "redirect:/reservations";
     }   
+
+
+    @GetMapping("pdf")
+    public ModelAndView telechargerPdf(@RequestParam String id) {
+        Integer idReservation = Integer.parseInt(id);
+        
+        try {
+             reservationService.payeeReservation(idReservation);
+        
+        
+        redirectAttributes.addFlashAttribute("succes", "Réservation payee avec succès");
+        } catch (Exception e) {
+          redirectAttributes.addFlashAttribute("erreur", "Erreur lors du paiement de la réservation : " + e.getMessage());
+        }
+        return "redirect:/reservations";
+    }   
     
     
 }
