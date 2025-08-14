@@ -80,21 +80,22 @@ public class VolController {
         ModelAndView mv = new ModelAndView("template-back");
         Vol vol = volService.getVolById(Integer.parseInt(idVol));
         int i= 0;
-        
+        montant = montant / 100; 
         List<ConfVol> confVols = confVolRepository.findByVol(vol);
         for (ConfVol confVol : confVols) {
             if(confVol.getCategorieAge().getIdCategorieAge().equals(Integer.parseInt(idCategorieAge))==false) {
                 ConfVol newConfVol = new ConfVol();
                 newConfVol.setVol(confVol.getVol());
                 newConfVol.setCategorieAge(categorieAgeRepository.findById(Integer.parseInt(idCategorieAge)).orElse(null));
-                newConfVol.setMontant(confVol.getMontant()*montant);
+                newConfVol.setMontant(confVol.getMontant()-(confVol.getMontant()*montant));
                 newConfVol.setCapacite(confVol.getCapacite());
                 newConfVol.setClasse(confVol.getClasse());
                 confVolRepository.save(newConfVol);
-                confVols.add(newConfVol);
+                
                 i++;
             }
         }
+        confVols = confVolRepository.findByVol(vol);
         
         
         mv.addObject("page", "vols/caracteristique");
