@@ -21,6 +21,18 @@
             <div th:text="${erreur}"></div>
         </div>
 
+        <div th:if="${param.succes}" 
+             class="p-4 text-green-700 bg-green-50 border-l-4 border-green-500 rounded-md mx-6 mt-4 flex items-start">
+            <i data-lucide="check-circle" class="w-5 h-5 mr-3 mt-0.5 flex-shrink-0"></i>
+            <div th:text="${param.succes}"></div>
+        </div>
+
+        <div th:if="${param.erreur}" 
+             class="p-4 text-red-700 bg-red-50 border-l-4 border-red-500 rounded-md mx-6 mt-4 flex items-start">
+            <i data-lucide="alert-triangle" class="w-5 h-5 mr-3 mt-0.5 flex-shrink-0"></i>
+            <div th:text="${param.erreur}"></div>
+        </div>
+
         <!-- Table -->
         <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-200">
@@ -90,6 +102,11 @@
                                 th:href="@{reservations/payer(id=${reservation.idReservation})}" 
                                 class="inline-flex items-center px-3 py-1 border border-green-500 rounded-md text-green-600 hover:bg-green-50">
                                     <i data-lucide="credit-card" class="w-4 h-4 mr-1"></i>Payer
+                                </a>
+
+                                <a th:href="@{reservations/pdf(id=${reservation.idReservation})}" 
+                                class="inline-flex items-center px-3 py-1 border border-blue-500 rounded-md text-blue-600 hover:bg-blue-50">
+                                    <i data-lucide="download" class="w-4 h-4 mr-1"></i>Télécharger PDF
                                 </a>
                             </div>
                         </td>

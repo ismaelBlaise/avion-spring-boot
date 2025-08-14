@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpSession;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
@@ -35,24 +36,32 @@ public class ReservationController {
     }
 
     @GetMapping("annuler")
-    public ModelAndView annulerReservation(@RequestParam String id) {
+    public String annulerReservation(@RequestParam String id, RedirectAttributes redirectAttributes) {
         Integer idReservation = Integer.parseInt(id);
-        reservationService.annulerReservation(idReservation);
-        
-        ModelAndView mv = new ModelAndView("redirect:/reservations");
-        // mv.addObject("message", "Réservation annulée avec succès");
-        return mv;
+        try {
+            reservationService.annulerReservation(idReservation);
+            redirectAttributes.addFlashAttribute("succes", "Réservation annulée avec succès");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("erreur", "Erreur lors de l'annulation : " + e.getMessage());
+        }
+        return "redirect:/reservations";
     }
 
 
+
     @GetMapping("payer")
-    public ModelAndView payerReservation(@RequestParam String id) {
+    public String payerReservation(@RequestParam String id, RedirectAttributes redirectAttributes) {
         Integer idReservation = Integer.parseInt(id);
-        reservationService.payeeReservation(idReservation);
         
-        ModelAndView mv = new ModelAndView("redirect:/reservations");
-        // mv.addObject("message", "Réservation payée avec succès");
-        return mv;
+        try {
+             reservationService.payeeReservation(idReservation);
+        
+        
+        redirectAttributes.addFlashAttribute("succes", "Réservation payee avec succès");
+        } catch (Exception e) {
+          redirectAttributes.addFlashAttribute("erreur", "Erreur lors du paiement de la réservation : " + e.getMessage());
+        }
+        return "redirect:/reservations";
     }   
     
     

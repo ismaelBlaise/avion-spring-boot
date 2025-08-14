@@ -11,6 +11,7 @@ import com.s6.avion.model.ReservationDetail;
 import com.s6.avion.model.ReservationPaiement;
 import com.s6.avion.model.Statut;
 import com.s6.avion.model.Utilisateur;
+import com.s6.avion.repository.ReservationDetailRepository;
 import com.s6.avion.repository.ReservationPaiementRepository;
 import com.s6.avion.repository.ReservationRepository;
 
@@ -24,6 +25,9 @@ public class ReservationService {
 
     @Autowired
     private StatutService statutService;
+
+    @Autowired
+    private ReservationDetailRepository reservationDetailRepository;
 
     @Autowired
     private ReservationPaiementRepository reservationPaiementRepository;
@@ -51,7 +55,7 @@ public class ReservationService {
     public void payeeReservation(Integer idReservation) {
         Reservation reservation = reservationRepository.findById(idReservation).orElse(null);
         if (reservation != null) {
-            List<ReservationDetail> reservationDetails = reservation.getDetails();
+            List<ReservationDetail> reservationDetails = reservationDetailRepository.findByReservation(reservation);
             double montantTotal=0;
             for (ReservationDetail reservationDetail : reservationDetails) {
                 montantTotal += reservationDetail.getPrix();
