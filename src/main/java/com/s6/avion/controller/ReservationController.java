@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.s6.avion.dto.ReservationDetailDTO;
 import com.s6.avion.dto.ReservationDetailResponse;
 import com.s6.avion.model.Reservation;
-import com.s6.avion.service.PdfGeneratorService;
+import com.s6.avion.service.PdfService;
 import com.s6.avion.service.ReservationService;
 
 import jakarta.servlet.http.HttpSession;
@@ -32,7 +32,7 @@ public class ReservationController {
     private ReservationService reservationService;
 
     @Autowired
-    private PdfGeneratorService pdfGeneratorService;
+    private PdfService pdfGeneratorService;
 
     @GetMapping
     public ModelAndView getAllReservations(HttpSession session) {
