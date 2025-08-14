@@ -1,11 +1,20 @@
 package com.s6.avion.service;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
+import com.s6.avion.dto.ReservationDetailResponse;
 import com.s6.avion.model.Reservation;
 import com.s6.avion.model.ReservationDetail;
 import com.s6.avion.model.ReservationPaiement;
@@ -32,7 +41,10 @@ public class ReservationService {
     @Autowired
     private ReservationPaiementRepository reservationPaiementRepository;
 
-    
+    @Autowired
+    private RestTemplate restTemplate;
+
+
     
     
     public List<Reservation> getAllReservations(Integer idUtilisateur) {
@@ -72,6 +84,37 @@ public class ReservationService {
             Statut statutPayee = statutService.getStatutByName("Payee");
             reservation.setStatut(statutPayee);
             reservationRepository.save(reservation);
+        }
+    }
+
+
+
+    private final String baseUrl = "http://localhost:8080/avion-framework";
+
+   
+    public ReservationDetailResponse getReservationDetails(int idReservation) {
+        String url = baseUrl + "/reservation-details-json?id=" + idReservation;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+
+        HttpEntity<String> request = new HttpEntity<>(headers);
+
+        try {
+            ResponseEntity<ReservationDetailResponse> response = restTemplate.exchange(
+                    url,
+                    HttpMethod.GET,
+                    request,
+                    ReservationDetailResponse.class
+            );
+
+            if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
+                return response.getBody();
+            } else {
+                throw new RuntimeException("Erreur lors de la récupération des détails: " + response.getStatusCode());
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Erreur lors de l'appel API: " + e.getMessage(), e);
         }
     }
     
