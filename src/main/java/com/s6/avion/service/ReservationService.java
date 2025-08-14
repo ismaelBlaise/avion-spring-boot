@@ -20,6 +20,7 @@ import com.s6.avion.model.ReservationDetail;
 import com.s6.avion.model.ReservationPaiement;
 import com.s6.avion.model.Statut;
 import com.s6.avion.model.Utilisateur;
+import com.s6.avion.model.Vol;
 import com.s6.avion.repository.ReservationDetailRepository;
 import com.s6.avion.repository.ReservationPaiementRepository;
 import com.s6.avion.repository.ReservationRepository;
@@ -56,12 +57,26 @@ public class ReservationService {
 
     public void annulerReservation(Integer idReservation) {
         Reservation reservation = reservationRepository.findById(idReservation).orElse(null);
-        if (reservation != null) {
-            Statut statutAnnule = statutService.getStatutByName("Annulee");
-            reservation.setStatut(statutAnnule);
-            reservationRepository.save(reservation);
+
+        if (reservation == null) {
+            throw new RuntimeException("Réservation introuvable.");
         }
+
+        Vol vol = reservation.getVol();
+
+        // Vérification si la fin d'annulation est configurée
+        if (vol.getFinAnnulation() != null) {
+            if (LocalDateTime.now().isAfter(vol.getFinAnnulation())) {
+                throw new RuntimeException("La période d'annulation est dépassée pour ce vol.");
+            }
+        }
+
+        // Annulation
+        Statut statutAnnule = statutService.getStatutByName("Annulee");
+        reservation.setStatut(statutAnnule);
+        reservationRepository.save(reservation);
     }
+
 
 
     public void payeeReservation(Integer idReservation) {
