@@ -82,15 +82,15 @@ public class ReservationService {
     public void payeeReservation(Integer idReservation) {
         Reservation reservation = reservationRepository.findById(idReservation).orElse(null);
         if (reservation != null) {
-            List<ReservationDetail> reservationDetails = reservationDetailRepository.findByReservation(reservation);
+            // List<ReservationDetail> reservationDetails = reservationDetailRepository.findByReservation(reservation);
             double montantTotal=0;
-            for (ReservationDetail reservationDetail : reservationDetails) {
-                montantTotal += reservationDetail.getPrix();
+            // for (ReservationDetail reservationDetail : reservationDetails) {
+            //     montantTotal += reservationDetail.getPrix();
                 
-            }
-            if(montantTotal <= 0) {
-                throw new IllegalArgumentException("Aucune réservation à payer ou montant invalide.");
-            }
+            // }
+            // if(montantTotal <= 0) {
+            //     throw new IllegalArgumentException("Aucune réservation à payer ou montant invalide.");
+            // }
             ReservationPaiement reservationPaiement = new ReservationPaiement();
             reservationPaiement.setReservation(reservation);
             reservationPaiement.setMontant(montantTotal);
