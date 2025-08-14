@@ -1,0 +1,119 @@
+<div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+    <div class="bg-white shadow rounded-lg overflow-hidden">
+        <!-- Header -->
+        <div class="px-6 py-5 border-b border-gray-200">
+            <h2 class="text-xl font-semibold text-gray-800 flex items-center">
+                <i data-lucide="ticket" class="w-6 h-6 text-blue-500 mr-2"></i>
+                Gestion des réservations
+            </h2>
+        </div>
+
+        <!-- Messages -->
+        <div th:if="${succes}" 
+             class="p-4 text-green-700 bg-green-50 border-l-4 border-green-500 rounded-md mx-6 mt-4 flex items-start">
+            <i data-lucide="check-circle" class="w-5 h-5 mr-3 mt-0.5 flex-shrink-0"></i>
+            <div th:text="${succes}"></div>
+        </div>
+
+        <div th:if="${erreur}" 
+             class="p-4 text-red-700 bg-red-50 border-l-4 border-red-500 rounded-md mx-6 mt-4 flex items-start">
+            <i data-lucide="alert-triangle" class="w-5 h-5 mr-3 mt-0.5 flex-shrink-0"></i>
+            <div th:text="${erreur}"></div>
+        </div>
+
+        <!-- Table -->
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <div class="flex items-center">
+                                <i data-lucide="hash" class="w-4 h-4 mr-2"></i>ID Réservation
+                            </div>
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <div class="flex items-center">
+                                <i data-lucide="calendar" class="w-4 h-4 mr-2"></i>Date
+                            </div>
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <div class="flex items-center">
+                                <i data-lucide="user" class="w-4 h-4 mr-2"></i>Utilisateur
+                            </div>
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <div class="flex items-center">
+                                <i data-lucide="plane" class="w-4 h-4 mr-2"></i>Vol
+                            </div>
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <div class="flex items-center">
+                                <i data-lucide="flag" class="w-4 h-4 mr-2"></i>Statut
+                            </div>
+                        </th>
+                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200" th:if="${reservations != null and !#lists.isEmpty(reservations)}">
+                    <tr th:each="reservation : ${reservations}" class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900" th:text="${reservation.idReservation}"></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" 
+                            th:text="${#temporals.format(reservation.dateReservation, 'dd/MM/yyyy HH:mm')}"></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" 
+                            th:text="${reservation.utilisateur != null ? reservation.utilisateur.nom : 'N/A'}"></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" 
+                            th:text="${reservation.vol != null ? reservation.vol.numero : 'N/A'}"></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                            <span class="px-2 py-1 rounded-full text-xs"
+                                th:classappend="${reservation.statut != null && reservation.statut.statut == 'Confirme' ? ' bg-green-100 text-green-800' :
+                                                (reservation.statut != null && reservation.statut.statut == 'Annulee' ? ' bg-red-100 text-red-800' :
+                                                (reservation.statut != null && reservation.statut.statut == 'Payee' ? ' bg-blue-100 text-blue-800' :
+                                                ' bg-yellow-100 text-yellow-800'))}">
+                                <span th:text="${reservation.statut != null ? reservation.statut.statut : 'N/A'}"></span>
+                            </span>
+                        </td>
+
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            <div class="flex justify-end space-x-3">
+                                <!-- Détails -->
+                                
+
+                                <!-- Annuler si non annulée -->
+                                <a th:if="${reservation.statut == null || reservation.statut.statut != 'Annulee' && reservation.statut.statut != 'Payee'}"
+                                th:href="@{reservations/annuler(id=${reservation.idReservation})}" 
+                                class="inline-flex items-center px-3 py-1 border border-red-500 rounded-md text-red-600 hover:bg-red-50">
+                                    <i data-lucide="x" class="w-4 h-4 mr-1"></i>Annuler
+                                </a>
+
+                                <!-- Payer si confirmé -->
+                                <a th:if="${reservation.statut != null && reservation.statut.statut == 'Confirme'}"
+                                th:href="@{reservations/payer(id=${reservation.idReservation})}" 
+                                class="inline-flex items-center px-3 py-1 border border-green-500 rounded-md text-green-600 hover:bg-green-50">
+                                    <i data-lucide="credit-card" class="w-4 h-4 mr-1"></i>Payer
+                                </a>
+                            </div>
+                        </td>
+
+                    </tr>
+                </tbody>
+                <tbody th:if="${reservations == null || #lists.isEmpty(reservations)}">
+                    <tr>
+                        <td colspan="6" class="px-6 py-8 text-center">
+                            <div class="flex flex-col items-center justify-center text-gray-400">
+                                <i data-lucide="alert-circle" class="w-12 h-12 mb-3"></i>
+                                <p class="text-lg font-medium">Aucune réservation trouvée</p>
+                                <p class="text-sm mt-1">Aucune réservation ne correspond à votre recherche</p>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        lucide.createIcons();
+    });
+</script>

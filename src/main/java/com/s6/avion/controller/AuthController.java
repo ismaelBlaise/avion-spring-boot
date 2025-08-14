@@ -1,14 +1,9 @@
 package com.s6.avion.controller;
 
 import com.s6.avion.model.Utilisateur;
-import com.s6.avion.model.Vol;
 import com.s6.avion.service.*;
-
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-
-import java.util.List;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
