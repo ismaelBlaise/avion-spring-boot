@@ -24,4 +24,9 @@ public class UtilisateurService {
     }
 
      
+
+    public Utilisateur getById(Integer id) {
+        return utilisateurRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé avec l'ID: " + id));
+    }
 }
